@@ -4,11 +4,11 @@
  *
  * Funcionalidades:
  * - 3 níveis de dificuldade (Fácil, Normal, Difícil)
- * - DMA para matriz WS2812B (bônus)
+ * - DMA para matriz WS2812B
  * - High Score salvo na flash
  * - Conectividade Wi-Fi e publicação MQTT de recordes
  * - Melodias: abertura (Mario), início (Korobeiniki), game over (Sad Trombone)
- * - Dois buzzers alternados (duty cycle 12.5%, sem aquecimento)
+ * - Dois buzzers alternados
  * - Interrupção (IRQ) no botão do joystick
  * - Comunicação UART (printf)
  */
@@ -35,8 +35,8 @@
 #include "ssd1306.h"            // Driver do display OLED SSD1306
 
 // ========== CONFIGURAÇÕES DE REDE ==========
-#define WIFI_SSID       "REGINALDO"                 // Nome da rede Wi-Fi
-#define WIFI_PASSWORD   "13031974"                  // Senha da rede Wi-Fi
+#define WIFI_SSID       "SEU_WIFI"                 // Nome da rede Wi-Fi
+#define WIFI_PASSWORD   "SUA_SENHA"                  // Senha da rede Wi-Fi
 #define MQTT_BROKER     "broker.hivemq.com"         // Endereço do broker MQTT público
 #define MQTT_TOPIC      "embarcatech/geniuslab/score" // Tópico MQTT para publicação do recorde
 
@@ -95,8 +95,8 @@ const uint8_t hard_red[]    = {18};  // LED central inferior direito
 // Tabela de configurações para cada nível de dificuldade
 const difficulty_config_t difficulties[] = {
     [DIFF_EASY]   = { "FACIL",  {easy_quadrants[0], easy_quadrants[1], easy_quadrants[2], easy_quadrants[3]}, {4,4,4,4}, 600, 300 },
-    [DIFF_NORMAL] = { "NORMAL", {easy_quadrants[0], easy_quadrants[1], easy_quadrants[2], easy_quadrants[3]}, {4,4,4,4}, 400, 200 },
-    [DIFF_HARD]   = { "DIFICIL",{hard_green, hard_blue, hard_yellow, hard_red},                               {1,1,1,1}, 200, 100 }
+    [DIFF_NORMAL] = { "NORMAL", {easy_quadrants[0], easy_quadrants[1], easy_quadrants[2], easy_quadrants[3]}, {4,4,4,4}, 300, 150 },
+    [DIFF_HARD]   = { "DIFICIL",{hard_green, hard_blue, hard_yellow, hard_red},                               {1,1,1,1}, 150, 50 }
 };
 
 // ========== HIGH SCORE NA MEMÓRIA FLASH ==========
@@ -277,7 +277,7 @@ void buzzer_play_tone(uint16_t freq, uint32_t ms) {
     uint32_t wrap = clock_get_hz(clk_sys) / (div * freq);
     pwm_set_clkdiv(slice, div);
     pwm_set_wrap(slice, wrap);
-    pwm_set_gpio_level(pin, wrap / 8);    // Duty cycle 12.5% (volume original, sem aquecimento)
+    pwm_set_gpio_level(pin, wrap / 8);
     pwm_set_enabled(slice, true);
     sleep_ms(ms);
     pwm_set_enabled(slice, false);
